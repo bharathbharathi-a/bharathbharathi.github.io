@@ -1,0 +1,114 @@
+:root{
+  --bg:#0f1720;
+  --card:#0b1220;
+  --text:#e6eef8;
+  --accent:#4f46e5;
+  --container-max:1100px;
+  --space:1.125rem;
+  --dur:420ms;
+  --ease:cubic-bezier(.2,.9,.2,1);
+}
+
+/* Reset + base */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* Container */
+.container{
+  width:100%;
+  max-width:var(--container-max);
+  margin:0 auto;
+  padding:0 1rem;
+}
+
+/* Header / nav */
+.site-header{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  position:sticky;
+  top:0;
+  z-index:30;
+  backdrop-filter: blur(6px);
+}
+.site-header .container{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  padding:0.85rem 0;
+}
+.brand{font-weight:700; color:var(--text); text-decoration:none}
+.nav{display:none; gap:1rem}
+.nav a{color:var(--text); text-decoration:none; padding:0.35rem 0.5rem; border-radius:6px}
+.nav a:hover{background:rgba(255,255,255,0.03)}
+
+/* Toggle button for mobile */
+.nav-toggle{
+  margin-left:auto;
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.06);
+  color:var(--text);
+  padding:0.4rem 0.6rem;
+  border-radius:6px;
+}
+
+/* Hero */
+.hero{
+  padding:4rem 0;
+  text-align:center;
+}
+.hero-title{font-size:clamp(1.5rem, 4.5vw, 2.75rem); margin:0 0 0.5rem}
+.hero-sub{opacity:0.85}
+
+/* Cards grid (mobile-first) */
+.grid-section{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:1rem;
+  padding:2rem 0;
+}
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding:1rem;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.03);
+}
+
+/* Footer */
+.site-footer{padding:2rem 0; text-align:center; opacity:0.9; font-size:0.95rem}
+
+/* Animations: use transform & opacity only (compositor-friendly) */
+.fade-in{
+  opacity:0;
+  transform:translateY(14px);
+  will-change:opacity, transform;
+  transition:opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.fade-in.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* Desktop / larger screens */
+@media (min-width:900px){
+  .nav{display:flex}
+  .nav-toggle{display:none}
+  .hero{ text-align:left; padding:6rem 0 }
+  .site-header .container{align-items:center}
+  .grid-section{ grid-template-columns: repeat(3, 1fr); gap:1.25rem }
+}
+
+/* Avoid horizontal scroll glitches due to 100vw usage */
+html{overflow-x:hidden}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .fade-in{ transition:none }
+}
