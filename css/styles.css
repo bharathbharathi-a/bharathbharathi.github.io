@@ -79,29 +79,33 @@ body{
   padding:1rem;
   border-radius:10px;
   border:1px solid rgba(255,255,255,0.03);
+  transition: transform .28s var(--ease), box-shadow .28s var(--ease);
+  will-change: transform, box-shadow;
 }
 
 /* Footer */
 .site-footer{padding:2rem 0; text-align:center; opacity:0.9; font-size:0.95rem}
 
-/* Animations: use transform & opacity only (compositor-friendly) */
-.fade-in{
+/* Reveal & fade-in: transform & opacity only */
+.reveal, .fade-in{
   opacity:0;
   transform:translateY(14px);
   will-change:opacity, transform;
   transition:opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
-.fade-in.is-visible{
+.reveal.is-visible, .fade-in.is-visible{
   opacity:1;
   transform:translateY(0);
 }
+
+/* Hover effect for desktop */
+.card:hover, .card:focus-within { transform: translateY(-8px) scale(1.02); box-shadow: 0 14px 40px rgba(8,10,20,0.55); }
 
 /* Desktop / larger screens */
 @media (min-width:900px){
   .nav{display:flex}
   .nav-toggle{display:none}
   .hero{ text-align:left; padding:6rem 0 }
-  .site-header .container{align-items:center}
   .grid-section{ grid-template-columns: repeat(3, 1fr); gap:1.25rem }
 }
 
@@ -110,5 +114,5 @@ html{overflow-x:hidden}
 
 /* Respect user preference for reduced motion */
 @media (prefers-reduced-motion: reduce){
-  .fade-in{ transition:none }
+  .reveal, .fade-in { transition:none !important; animation:none !important; }
 }
