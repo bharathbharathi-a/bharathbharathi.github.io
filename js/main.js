@@ -1,6 +1,4 @@
-// Small, performant script:
-// - mobile nav toggle
-// - IntersectionObserver to add .is-visible for .fade-in elements (scroll animations)
+// nav toggle + simple typed text + IntersectionObserver reveal
 document.addEventListener('DOMContentLoaded', function () {
   // Nav toggle
   const toggle = document.querySelector('.nav-toggle');
@@ -10,9 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const open = toggle.getAttribute('aria-expanded') === 'true';
       toggle.setAttribute('aria-expanded', String(!open));
       nav.style.display = open ? '' : 'flex';
-      // For accessibility on small screens, we'll add a simple class; desktop CSS shows nav by default
     });
-    // Ensure nav style gets reset on viewport resize
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 900) {
         nav.style.display = '';
@@ -23,12 +19,30 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // IntersectionObserver for scroll animations (fast & efficient)
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px 0px -8% 0px', // trigger a bit earlier
-    threshold: 0.08
-  };
+  // Simple typing effect (vanilla)
+  function typeText(el, words, speed = 90, pause = 1200) {
+    if (!el || !words || words.length === 0) return;
+    let w = 0, i = 0, forward = true;
+    function step() {
+      const word = words[w];
+      if (forward) {
+        i++;
+        el.textContent = word.slice(0, i);
+        if (i === word.length) { forward = false; setTimeout(step, pause); return; }
+      } else {
+        i--;
+        el.textContent = word.slice(0, i);
+        if (i === 0) { forward = true; w = (w + 1) % words.length; }
+      }
+      setTimeout(step, speed);
+    }
+    step();
+  }
+  const typedEl = document.querySelector('.hero .typed');
+  if (typedEl) typeText(typedEl, ['Front-end Developer', 'UI/UX Designer', 'Open Source Enthusiast']);
+
+  // IntersectionObserver for reveal animations
+  const observerOptions = { root: null, rootMargin: '0px 0px -8% 0px', threshold: 0.08 };
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -37,6 +51,5 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }, observerOptions);
-
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  document.querySelectorAll('.reveal, .fade-in').forEach(el => observer.observe(el));
 });
